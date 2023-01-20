@@ -9,8 +9,8 @@ terraform {
   }
 
   backend "s3" {
-    bucket = "cley-eks-ansible-bucket"
-    key    = "cley-net-ansible-key"
+    bucket = "cley-eks-tfstate-bucket"
+    key    = "cley-net-tfstate-key"
     region = "eu-west-3"
   }
 }
