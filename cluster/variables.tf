@@ -7,7 +7,7 @@ variable "state_bucket"{
 }
 
 variable "state_key"{
-    default = "cley-eks-cluster.tfstate"
+    default = "cley-eks-networking.tfstate"
 }
 
 variable "state_region"{
