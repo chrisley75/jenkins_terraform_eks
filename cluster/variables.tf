@@ -3,11 +3,11 @@ variable "cluster_name"{
 }
 
 variable "state_bucket"{
-    default = "cley-eks-ansible-bucket"
+    default = "cley-eks-tfstate-bucket"
 }
 
 variable "state_key"{
-    default = "cley-eks-ansible-state"
+    default = "cley-eks-tfstate-state"
 }
 
 variable "state_region"{
