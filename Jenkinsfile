@@ -5,7 +5,7 @@ pipeline{
     environment{
         AWS_DEFAULT_REGION="eu-west-3"
         SKIP="N"
-        TERRADESTROY="N"
+        TERRADESTROY="Y"
         FIRST_DEPLOY="Y"
         STATE_BUCKET="cley-eks-tfstate-bucket"
         CLUSTER_NAME="cley-eks"
@@ -106,7 +106,7 @@ pipeline{
                     script {
                             sh """
                             cd cluster
-                            aws eks update-kubeconfig --name ${env.CLUSTER_NAME} 
+                            aws eks update-kubeconfig --name ${env.CLUSTER_NAME} --region ${env.AWS_DEFAULT_REGION}
                             kubectl get pods
                             kubectl get nodes
                             """
