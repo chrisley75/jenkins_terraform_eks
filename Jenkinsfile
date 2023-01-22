@@ -5,7 +5,7 @@ pipeline{
     environment{
         AWS_DEFAULT_REGION="eu-west-3"
         SKIP="N"
-        TERRADESTROY="Y"
+        TERRADESTROY="N"
         FIRST_DEPLOY="Y"
         STATE_BUCKET="cley-eks-tfstate-bucket"
         CLUSTER_NAME="cley-eks"
@@ -136,9 +136,6 @@ pipeline{
             stages{
 
                 stage("Destroy eks cluster"){
-                    when{
-                        environment name:'SKIP',value:'Y'
-                    }
                     steps{
                         sh '''
                             cd cluster
@@ -149,9 +146,6 @@ pipeline{
                 }
 
                 stage("Destroy n/w infra"){
-                    when{
-                        environment name:'SKIP',value:'Y'
-                    }
                     steps{
                         sh '''
                             cd networking
