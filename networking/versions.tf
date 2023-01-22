@@ -10,7 +10,7 @@ terraform {
 
   backend "s3" {
     bucket = "cley-eks-tfstate-bucket"
-    key    = "cley-net-tfstate-key"
+    key    = "cley-eks-net.tfstate
     region = "eu-west-3"
   }
 }
