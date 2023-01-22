@@ -110,7 +110,7 @@ pipeline{
                             }
                         }
 
-/*        stage('Notify on Slack'){
+        /*stage('Notify on Slack'){
              when{
                 environment name:'FIRST_DEPLOY',value:'Y'
                 environment name:'TERRADESTROY',value:'N'
@@ -118,8 +118,8 @@ pipeline{
             }
             steps{
                 slackSend botUser: true, channel: '<channel_name>', message: "EKS Cluster successfully deployed. Cluster Name: $CLUSTER_NAME", tokenCredentialId: '<token_name>'
-            }*/
-        }
+            }
+        }*/
 
 
 
