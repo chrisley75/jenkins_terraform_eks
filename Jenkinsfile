@@ -97,18 +97,23 @@ pipeline{
         }
 
         stage('test kubectl'){
-                            steps{
-                                script {
-                                    sh """
-                                    cd cluster
-                                    aws eks update-kubeconfig --name ${env.CLUSTER_NAME} 
-                                    kubectl get pods
-                                    kubectl get nodes
-                                    """
+            when{
+                environment name:'FIRST_DEPLOY',value:'Y'
+                environment name:'TERRADESTROY',value:'N'
+                environment name:'SKIP',value:'N'
+            }
+                steps{
+                    script {
+                            sh """
+                            cd cluster
+                            aws eks update-kubeconfig --name ${env.CLUSTER_NAME} 
+                            kubectl get pods
+                            kubectl get nodes
+                            """
 
-                                }
-                            }
+                           }
                         }
+        }
 
         /*stage('Notify on Slack'){
              when{
