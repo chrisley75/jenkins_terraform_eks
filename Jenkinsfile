@@ -19,7 +19,7 @@ pipeline{
                 environment name:'SKIP',value:'N'
             }
             steps{
-                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ""${env.AWS_DEFAULT_REGION}"") {
+                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                     sh'''
                     aws s3 mb s3://${STATE_BUCKET}'''
                 }
