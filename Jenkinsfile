@@ -19,9 +19,10 @@ pipeline{
                 environment name:'SKIP',value:'N'
             }
             steps{
-                sh'''
-                aws s3 mb s3://${STATE_BUCKET}'''
-                
+                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                    sh'''
+                    aws s3 mb s3://${STATE_BUCKET}'''
+                }
             }
         }
 
@@ -34,19 +35,23 @@ pipeline{
             stages{
                 stage('Validate infra'){
                             steps{
-                                sh '''
-                                cd networking
-                                terraform init
-                                terraform validate'''
+                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                                    sh '''
+                                    cd networking
+                                    terraform init
+                                    terraform validate'''
+                                }
                             }
                         }
                         stage('apply n/w modules'){
                              
                             steps{
-                                sh '''
-                                cd networking
-                                terraform plan -out outfile
-                                terraform apply outfile'''
+                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                                    sh '''
+                                    cd networking
+                                    terraform plan -out outfile
+                                    terraform apply outfile'''
+                                }
                             }
                         }
             }
@@ -61,19 +66,23 @@ pipeline{
             stages{
                 stage('Validate infra'){
                             steps{
-                                sh '''
-                                cd cluster
-                                terraform init
-                                terraform validate'''
+                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                                    sh '''
+                                    cd cluster
+                                    terraform init
+                                    terraform validate'''
+                                }
                             }
                         }
                         stage('spin up cluster'){
                              
                             steps{
-                                sh '''
-                                cd cluster
-                                terraform plan -out outfile
-                                terraform apply outfile'''
+                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                                    sh '''
+                                    cd cluster
+                                    terraform plan -out outfile
+                                    terraform apply outfile'''
+                                }
                             }
                         }
             }
@@ -87,12 +96,14 @@ pipeline{
                 environment name:'SKIP',value:'N'
             }
             steps{
-                sh"""
-                cd sample_app
-                aws eks update-kubeconfig --name ${env.CLUSTER_NAME} 
-                kubectl apply -f ng.yml
-                """
-                sleep 160
+                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                    sh"""
+                    cd sample_app
+                    aws eks update-kubeconfig --name ${env.CLUSTER_NAME} 
+                    kubectl apply -f ng.yml
+                    """
+                    sleep 160
+                }
             }
         }
 
@@ -103,7 +114,8 @@ pipeline{
                 environment name:'SKIP',value:'N'
             }
                 steps{
-                    script {
+                    withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                        script {
                             sh """
                             cd cluster
                             aws eks update-kubeconfig --name ${env.CLUSTER_NAME} --region ${env.AWS_DEFAULT_REGION}
@@ -113,6 +125,7 @@ pipeline{
 
                            }
                         }
+                }
         }
 
         /*stage('Notify on Slack'){
@@ -137,28 +150,34 @@ pipeline{
 
                 stage("Destroy eks cluster"){
                     steps{
-                        sh '''
+                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                            sh '''
                             cd cluster
                             terraform init
                             terraform destroy -auto-approve
                             '''
+                        }
                     }
                 }
 
                 stage("Destroy n/w infra"){
                     steps{
-                        sh '''
+                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                            sh '''
                             cd networking
                             terraform init
                             terraform destroy -auto-approve
                             '''
+                        }
                     }
                 }
 
                 stage("Destroy state bucket"){
                     steps{
-                         script {
-                            sh(returnStdout: true, script: "aws s3 rb s3://'${env.STATE_BUCKET}' --force").trim()                    
+                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                            script {
+                                sh(returnStdout: true, script: "aws s3 rb s3://'${env.STATE_BUCKET}' --force").trim()                    
+                            }
                         }
                     }
                 }
