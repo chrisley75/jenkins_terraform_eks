@@ -19,7 +19,7 @@ pipeline{
                 environment name:'SKIP',value:'N'
             }
             steps{
-                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ""${env.AWS_DEFAULT_REGION}"") {
                     sh'''
                     aws s3 mb s3://${STATE_BUCKET}'''
                 }
@@ -35,7 +35,7 @@ pipeline{
             stages{
                 stage('Validate infra'){
                             steps{
-                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                                     sh '''
                                     cd networking
                                     terraform init
@@ -46,7 +46,7 @@ pipeline{
                         stage('apply n/w modules'){
                              
                             steps{
-                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                                     sh '''
                                     cd networking
                                     terraform plan -out outfile
@@ -66,7 +66,7 @@ pipeline{
             stages{
                 stage('Validate infra'){
                             steps{
-                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                                     sh '''
                                     cd cluster
                                     terraform init
@@ -77,7 +77,7 @@ pipeline{
                         stage('spin up cluster'){
                              
                             steps{
-                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                                     sh '''
                                     cd cluster
                                     terraform plan -out outfile
@@ -96,7 +96,7 @@ pipeline{
                 environment name:'SKIP',value:'N'
             }
             steps{
-                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                     sh"""
                     cd sample_app
                     aws eks update-kubeconfig --name ${env.CLUSTER_NAME} 
@@ -114,7 +114,7 @@ pipeline{
                 environment name:'SKIP',value:'N'
             }
                 steps{
-                    withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                    withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                         script {
                             sh """
                             cd cluster
@@ -150,7 +150,7 @@ pipeline{
 
                 stage("Destroy eks cluster"){
                     steps{
-                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                             sh '''
                             cd cluster
                             terraform init
@@ -162,7 +162,7 @@ pipeline{
 
                 stage("Destroy n/w infra"){
                     steps{
-                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                             sh '''
                             cd networking
                             terraform init
@@ -174,7 +174,7 @@ pipeline{
 
                 stage("Destroy state bucket"){
                     steps{
-                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: ${env.AWS_DEFAULT_REGION}) {
+                        withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
                             script {
                                 sh(returnStdout: true, script: "aws s3 rb s3://'${env.STATE_BUCKET}' --force").trim()                    
                             }
