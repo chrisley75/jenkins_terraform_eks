@@ -6,7 +6,7 @@ pipeline{
         AWS_DEFAULT_REGION="eu-west-3"
         SKIP="N"
         TERRADESTROY="N"
-        FIRST_DEPLOY="Y"
+        FIRST_DEPLOY="N"
         STATE_BUCKET="cley-eks-tfstate-bucket"
         CLUSTER_NAME="cley-eks"
     }
@@ -19,12 +19,36 @@ pipeline{
                 environment name:'SKIP',value:'N'
             }
             steps{
+                echo "Check if bucket exists else create bucket phase"
                 withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
+                    script {
+                        bucketstatus=$(aws s3api head-bucket --bucket "${env.STATE_BUCKET}" 2>&1)
+                        if ()
+                    }
                     sh'''
                     aws s3 mb s3://${STATE_BUCKET}'''
                 }
             }
         }
+/*        stage('Create Terraform State Bucket') {  
+            steps {  
+                echo 'Running create bucket phase'
+                withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
+                script {
+                    def status = sh(script: "aws s3api head-bucket --bucket ${env.STATE_BUCKET}", returnStatus: true)
+                    def create = sh(script: "aws s3api create-bucket --bucket ${env.STATE_BUCKET} --region ${env.AWS_DEFAULT_REGION} --create-bucket-configuration LocationConstraint=${env.AWS_DEFAULT_REGION}", returnStatus: true)
+                    try {
+                        if (status == 0) { // Check if the bucket exists
+                        echo 'Bucket ${STATE_BUCKET} already exists'
+                    } 
+                    else create() {  // Create the bucket if it does not exist
+                        echo 'Bucket ${STATE_BUCKET} created'
+                    }
+                } catch (err) {
+                    echo "Caught: ${err}"
+                    currentBuild.result = 'SUCCESS'
+             }
+        }*/
 
         stage("Deploy Networking"){
             when{
