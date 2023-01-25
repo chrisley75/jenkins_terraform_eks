@@ -21,10 +21,6 @@ pipeline{
             steps{
                 echo "Check if bucket exists else create bucket phase"
                 withAWS(credentials: '39725218-cd8f-42a5-8857-c434967b37f5', region: "${env.AWS_DEFAULT_REGION}") {
-                    script {
-                        bucketstatus=$(aws s3api head-bucket --bucket "${env.STATE_BUCKET}" 2>&1)
-                        if ()
-                    }
                     sh'''
                     aws s3 mb s3://${STATE_BUCKET}'''
                 }
