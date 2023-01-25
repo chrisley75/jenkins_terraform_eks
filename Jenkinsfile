@@ -48,7 +48,7 @@ pipeline{
 
         stage("Deploy Networking"){
             when{
-                environment name:'FIRST_DEPLOY',value:'Y'
+/*                environment name:'FIRST_DEPLOY',value:'Y' */
                 environment name:'TERRADESTROY',value:'N'
                 environment name:'SKIP',value:'N'
             }
@@ -79,7 +79,7 @@ pipeline{
 
         stage("Deploy Cluster"){
             when{
-                environment name:'FIRST_DEPLOY',value:'Y'
+   /*             environment name:'FIRST_DEPLOY',value:'Y' */
                 environment name:'TERRADESTROY',value:'N'
                 environment name:'SKIP',value:'N'
             }
