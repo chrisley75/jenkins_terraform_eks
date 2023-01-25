@@ -47,7 +47,7 @@ module "eks" {
 
   eks_managed_node_groups = {
     grp1 = {
-      desired_size = 1
+      desired_size = 5
 
       instance_types = ["t2.small"]
       labels = {
